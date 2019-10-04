@@ -5,7 +5,6 @@ import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.producthunt.data.ApiProductHuntService
 import com.example.producthunt.data.db.CurrentDay
 import com.example.producthunt.data.network.Response.CurrentPostsResponse
 import com.example.producthunt.internal.NoConnectivityException
@@ -19,13 +18,10 @@ class PostNetworkDataSourceImpl (
         get() = _downloadedPost
 
     @RequiresApi(Build.VERSION_CODES.O)
-    override suspend fun fetchPost(
-        day: String,
-        page: Int,
-        pageSize: Int) {
+    override suspend fun fetchPost(day: String) {
         try {
             val fetchPosts = apiProductHuntService
-                .getCurrentPosts(CurrentDay.currentDay(), page, pageSize)
+                .getCurrentPosts(CurrentDay.currentDay()/*, page, pageSize*/)
                 .await()
             _downloadedPost.postValue(fetchPosts)
         }catch (e : NoConnectivityException){

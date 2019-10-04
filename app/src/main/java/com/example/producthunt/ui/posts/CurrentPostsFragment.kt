@@ -12,10 +12,9 @@ import androidx.annotation.RequiresApi
 import androidx.lifecycle.Observer
 
 import com.example.producthunt.R
-import com.example.producthunt.data.ApiProductHuntService
+import com.example.producthunt.data.network.ApiProductHuntService
 import com.example.producthunt.data.db.CurrentDay
 import com.example.producthunt.data.network.ConnectivityInterceptorImpl
-import com.example.producthunt.data.network.PostNetworkDataSource
 import com.example.producthunt.data.network.PostNetworkDataSourceImpl
 import kotlinx.android.synthetic.main.current_posts_fragment.*
 import kotlinx.coroutines.Dispatchers
@@ -42,7 +41,9 @@ class CurrentPostsFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(CurrentPostsViewModel::class.java)
 
-        val apiService = ApiProductHuntService(ConnectivityInterceptorImpl(this.context!!))
+        val apiService = ApiProductHuntService(
+            ConnectivityInterceptorImpl(this.context!!)
+        )
         val postNetworkDataSource = PostNetworkDataSourceImpl (apiService)
 
         postNetworkDataSource.downloadedPost.observe(this, Observer{
@@ -51,7 +52,7 @@ class CurrentPostsFragment : Fragment() {
         })
 
         GlobalScope.launch(Dispatchers.Main){
-            postNetworkDataSource.fetchPost(CurrentDay.currentDay(), 1,5)
+            postNetworkDataSource.fetchPost(CurrentDay.currentDay())
             Log.e("Dia de hoje: " , CurrentDay.currentDay())
         }
 

@@ -10,8 +10,8 @@ import com.example.producthunt.data.db.entity.Post
 interface PostDao {
 
    @Query("SELECT * FROM product_post ORDER BY productName")
-   fun loadPosts() : DataSource.Factory<Int, Post>
-
+   fun loadPosts():  List<Post>
+   //   fun loadPosts() : DataSource.Factory<Int, Post>
    @Insert(onConflict = OnConflictStrategy.REPLACE)
    fun insert(message: List<Post>)
 

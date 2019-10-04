@@ -8,8 +8,8 @@ interface PostNetworkDataSource {
      val downloadedPost: LiveData<CurrentPostsResponse>
 
     suspend fun fetchPost(
-        day : String,
-        page : Int,
-        pageSize : Int
+        day : String
+       /* page : Int,
+        pageSize : Int*/
     )
 }

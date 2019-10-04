@@ -1,6 +1,5 @@
-package com.example.producthunt.data
+package com.example.producthunt.data.network
 
-import com.example.producthunt.data.network.ConnectivityInterceptor
 import com.example.producthunt.data.network.Response.CurrentPostsResponse
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import kotlinx.coroutines.Deferred
@@ -17,15 +16,15 @@ const val API_KEY = "Bearer ggQelQNanZQ0LXCrR4Z_RFq03uy6ocBxG6P6uiRRWX0"
 interface ApiProductHuntService {
     @GET("posts/all")
     fun getCurrentPosts(
-        @Query("day") day:String,
+        @Query("day") day:String/*,
         @Query("page") page:Int,
-        @Query("per_page") pageSize:Int) : Deferred<CurrentPostsResponse>
+        @Query("per_page") pageSize:Int*/) : Deferred<CurrentPostsResponse>
 
 
     companion object{
         operator fun invoke(
             connectivityInterceptor: ConnectivityInterceptor
-        ):ApiProductHuntService{
+        ): ApiProductHuntService {
             val requestInterceptor = Interceptor { chain ->
 
                 val original = chain.request()

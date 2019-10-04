@@ -1,7 +1,17 @@
 package com.example.producthunt.ui.posts
 
 import androidx.lifecycle.ViewModel
+import com.example.producthunt.data.repository.PostRepository
+import com.example.producthunt.internal.lazyDeferred
+import com.example.producthunt.ui.base.PostViewModel
+import org.threeten.bp.LocalDate
 
-class CurrentPostsViewModel : ViewModel() {
-    // TODO: Implement the ViewModel
+class CurrentPostsViewModel(
+    private val postRepository : PostRepository
+) : ViewModel() {
+
+    val postEntries by lazyDeferred{
+        postRepository.getPost(LocalDate.now())
+
+    }
 }
