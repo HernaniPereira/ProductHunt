@@ -1,18 +1,19 @@
 package com.example.producthunt.data.db.entity
 
 
+import androidx.room.Embedded
 import com.google.gson.annotations.SerializedName
 
 data class User(
-    @SerializedName("created_at")
-    val createdAt: String,
-    val headline: String,
-    val id: Int,
-    @SerializedName("profile_url")
-    val profileUrl: String,
-    @SerializedName("twitter_username")
-    val twitterUsername: String,
-    val username: String,
-    @SerializedName("website_url")
-    val websiteUrl: String
-)
+    @SerializedName("id")
+    val userId: Int?,
+    val username: String?,
+    val headline: String?,
+    val name: String?,
+    @Embedded @SerializedName("image_url") val imageUrl: UserImage?)
+
+
+
+class UserImage (
+    @SerializedName("48px") val userSmallImgUrl: String?,
+    @SerializedName("73px") val userLargeImgUrl: String?)
