@@ -1,6 +1,7 @@
 package com.example.producthunt.data.repository
 
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -43,6 +44,7 @@ class PostRepositoryImpl(
     private fun persistFetchedPost(postList: List<Post>){
         GlobalScope.launch ( Dispatchers.IO){
             postDao.insert(postList)
+            Log.e("dadda", "adawda")
         }
     }
 
