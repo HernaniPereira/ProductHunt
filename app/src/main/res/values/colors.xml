@@ -21,6 +21,9 @@
 
     <color name="bg_comments">#FFFFFF</color>
 
+    <color name="lightGray">#BBBBBB</color>
+
+
     <!--Needed for MaterialDateTimePicker -->
     <color name="mdtp_accent_color">#3F51B5</color>
     <color name="mdtp_accent_color_dark">#303F9F</color>

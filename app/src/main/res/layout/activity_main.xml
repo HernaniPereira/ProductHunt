@@ -7,10 +7,24 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     tools:context=".ui.MainActivity">
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appBarLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="?attr/colorPrimary"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+                app:layout_scrollFlags="scroll|enterAlways|snap"/>
+        </com.google.android.material.appbar.AppBarLayout>
     <fragment
         android:id="@+id/nav_host_fragment"
         android:layout_width="match_parent"
@@ -20,22 +34,9 @@
         app:navGraph="@navigation/mobile_navigation"
         app:defaultNavHost="true" />
 
-   <com.google.android.material.appbar.AppBarLayout
-       android:id="@+id/appBarLayout"
-       android:layout_width="match_parent"
-       android:layout_height="wrap_content"
-       android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
-       <androidx.appcompat.widget.Toolbar
-           android:id="@+id/toolbar"
-           android:layout_width="match_parent"
-           android:layout_height="?attr/actionBarSize"
-           android:background="?attr/colorPrimary"
-           app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-           app:layout_scrollFlags="scroll|enterAlways|snap"/>
-   </com.google.android.material.appbar.AppBarLayout>
 
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+    </LinearLayout>
 
 
     <com.google.android.material.navigation.NavigationView

@@ -9,7 +9,7 @@ import com.example.producthunt.data.db.entity.Post
 @Dao
 interface PostDao {
 
-   @Query("SELECT * FROM product_post ORDER BY day")
+   @Query("SELECT * FROM product_post ORDER BY createdAt")
    fun loadPosts():  LiveData<List<Post>>
    //   fun loadPosts() : DataSource.Factory<Int, Post>
    @Insert(onConflict = OnConflictStrategy.REPLACE)

@@ -11,11 +11,15 @@ data class Post(
     @SerializedName("id") @PrimaryKey(autoGenerate = true) val productId:Long,
     @SerializedName("name") val productName:String?,
     val tagline:String?,
+    @SerializedName("created_at")
+    val createdAt: String,
     @SerializedName("day") val day:String?,
     @SerializedName("comments_count") val commentsCount: Int?,
     @SerializedName("votes_count")val votesCount:Int?,
     @SerializedName("screenshot_url")
     @Embedded val postImage: PostImage?,
+    @SerializedName("redirect_url")
+    var redirectUrl: String? = null,
     @SerializedName("user")
     @Embedded val user: User?)
 

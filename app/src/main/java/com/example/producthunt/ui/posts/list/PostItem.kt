@@ -12,7 +12,6 @@ class PostItem (
 ) : Item(){
     override fun bind(viewHolder: ViewHolder, position: Int) {
        viewHolder.apply {
-           id.text= postEntry.productId.toString()
            card_product_title.text = postEntry.productName
            card_product_description.text = postEntry.tagline
            card_product_upvotes.text = postEntry?.votesCount.toString()
