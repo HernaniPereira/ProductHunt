@@ -8,7 +8,7 @@ import com.example.producthunt.data.db.dao.PostDao
 import com.example.producthunt.data.db.entity.Post
 
 @Database(
-    entities = [Post::class], version =1)
+    entities = [Post::class], version =1,exportSchema = false)
 abstract class ProductHuntDataBase : RoomDatabase(){
 
     abstract fun postDao() : PostDao

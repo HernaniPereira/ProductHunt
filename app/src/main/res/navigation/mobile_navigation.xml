@@ -7,7 +7,22 @@
 
     <fragment
         android:id="@+id/currentPostsFragment"
-        android:name="com.example.producthunt.ui.posts.CurrentPostsFragment"
+        android:name="com.example.producthunt.ui.posts.list.CurrentPostsFragment"
         android:label="current_posts_fragment"
-        tools:layout="@layout/current_posts_fragment" />
+        tools:layout="@layout/current_posts_fragment" >
+        <action
+            android:id="@+id/actionDetail"
+            app:destination="@id/actioDetail" />
+        <argument
+            android:name="id"
+            app:argType="long" />
+    </fragment>
+    <fragment
+        android:id="@+id/actioDetail"
+        android:name="com.example.producthunt.ui.posts.detail.PostsDetailFragment"
+        android:label="PostsDetail" >
+        <argument
+            android:name="productId"
+            app:argType="long" />
+    </fragment>
 </navigation>

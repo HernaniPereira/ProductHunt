@@ -1,4 +1,4 @@
-package com.example.producthunt.ui.posts
+package com.example.producthunt.ui.posts.list
 
 import androidx.lifecycle.ViewModel
 import com.example.producthunt.data.repository.PostRepository

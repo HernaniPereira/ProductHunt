@@ -2,6 +2,7 @@ package com.example.producthunt.ui.base
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
+import com.example.producthunt.ui.posts.list.CurrentPostsFragmentDirections
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -22,4 +23,5 @@ abstract class ScopedFragment : Fragment (), CoroutineScope{
         super.onDestroy()
         job.cancel()
     }
+
 }

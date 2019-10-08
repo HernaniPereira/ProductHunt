@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">ProductHunt</string>
+    <string name="label_search_notes">Info</string>
 </resources>

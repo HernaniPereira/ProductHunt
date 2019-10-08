@@ -48,4 +48,11 @@ class PostRepositoryImpl(
         }
     }
 
+    override suspend fun getPostById(
+        productId: Long
+    ): LiveData<Post> {
+        return withContext(Dispatchers.IO){
+            return@withContext postDao.getDetailedPost(productId)
+        }
+    }
 }

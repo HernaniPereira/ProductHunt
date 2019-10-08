@@ -1,10 +1,7 @@
-package com.example.producthunt.ui.posts
+package com.example.producthunt.ui.posts.list
 
-import android.view.View
-import com.bumptech.glide.Glide
 import com.example.producthunt.R
 import com.example.producthunt.data.db.entity.Post
-import com.example.producthunt.data.db.entity.UserImage
 import com.example.producthunt.internal.glide.GlideApp
 import com.xwray.groupie.kotlinandroidextensions.Item
 import com.xwray.groupie.kotlinandroidextensions.ViewHolder
@@ -15,6 +12,7 @@ class PostItem (
 ) : Item(){
     override fun bind(viewHolder: ViewHolder, position: Int) {
        viewHolder.apply {
+           id.text= postEntry.productId.toString()
            card_product_title.text = postEntry.productName
            card_product_description.text = postEntry.tagline
            card_product_upvotes.text = postEntry?.votesCount.toString()

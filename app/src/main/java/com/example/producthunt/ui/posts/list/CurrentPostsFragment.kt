@@ -1,43 +1,39 @@
-package com.example.producthunt.ui.posts
+package com.example.producthunt.ui.posts.list
 
 import android.os.Build
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.RecyclerView.LayoutManager
-import androidx.recyclerview.widget.RecyclerView.getDefaultSize
 
-import com.example.producthunt.R
-import com.example.producthunt.data.network.ApiProductHuntService
-import com.example.producthunt.data.db.CurrentDay
 import com.example.producthunt.data.db.entity.Post
-import com.example.producthunt.data.network.ConnectivityInterceptorImpl
-import com.example.producthunt.data.network.PostNetworkDataSourceImpl
 import com.example.producthunt.ui.base.ScopedFragment
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
 import kotlinx.android.synthetic.main.current_posts_fragment.*
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.closestKodein
 import org.kodein.di.generic.instance
+import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.Navigation
+import com.example.producthunt.R
+import com.example.producthunt.data.db.CurrentDay
+import com.example.producthunt.ui.posts.detail.Communicator
+import com.example.producthunt.ui.posts.list.CurrentPostsFragmentDirections.actionDetail
 
 
 class CurrentPostsFragment : ScopedFragment(), KodeinAware {
 
+
     override val kodein by closestKodein()
+
+    private var model: Communicator?=null
 
 
     private val viewModelFactory: PostListViewModelFactory by instance()
@@ -71,14 +67,34 @@ class CurrentPostsFragment : ScopedFragment(), KodeinAware {
             postNetworkDataSource.fetchPost(CurrentDay.currentDay())
             Log.e("Dia de hoje: " , CurrentDay.currentDay())
         }*/
+
+        (activity as AppCompatActivity).supportActionBar!!.title = "News"
+
+        model= ViewModelProviders.of(activity!!).get(Communicator::class.java)
+
         bindUI()
+
+        swipeContainer.setOnRefreshListener {
+            loadItems()
+        }
+
     }
 
+    fun loadItems(){
+        onItemsLoadComplete()
+
+    }
+
+    fun onItemsLoadComplete(){
+        swipeContainer.isRefreshing = false
+        bindUI()
+
+    }
     private fun bindUI() = launch(Dispatchers.Main){
         val postsEntries = viewModel.postEntries.await()
 
         postsEntries.observe(this@CurrentPostsFragment, Observer {entries ->
-            //if(entries == null) return@Observer
+            if(entries == null) return@Observer
 
             group_loading.visibility = View.GONE
 
@@ -103,8 +119,17 @@ class CurrentPostsFragment : ScopedFragment(), KodeinAware {
         adapter= groupAdapter
         }
         groupAdapter.setOnItemClickListener { item, view ->
-            Toast.makeText(this@CurrentPostsFragment.context, "Clicou em" , Toast.LENGTH_LONG).show()
+            (item as? PostItem)?.let {
+                showPostDetail(it.postEntry.productId, view)
+            }
         }
     }
+    private fun showPostDetail(productId: Long, view: View){
+      //  model!!.setMsgCommunicator(id.toString())
+        val actionDetail = CurrentPostsFragmentDirections.actionDetail(productId)
+        Navigation.findNavController(view).navigate(actionDetail)
+    }
+
+
 
 }

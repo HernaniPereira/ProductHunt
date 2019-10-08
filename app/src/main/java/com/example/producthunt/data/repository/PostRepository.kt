@@ -9,4 +9,6 @@ interface PostRepository {
 
     suspend fun getPost(date: LocalDate) : LiveData<List<Post>>
 
+    suspend fun getPostById(productId: Long): LiveData<Post>
+
 }
