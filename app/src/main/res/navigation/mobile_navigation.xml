@@ -12,13 +12,13 @@
         tools:layout="@layout/current_posts_fragment" >
         <action
             android:id="@+id/actionDetail"
-            app:destination="@id/actioDetail" />
+            app:destination="@id/actionDetail" />
         <argument
             android:name="id"
             app:argType="long" />
     </fragment>
     <fragment
-        android:id="@+id/actioDetail"
+        android:id="@+id/actionDetail"
         android:name="com.example.producthunt.ui.posts.detail.PostsDetailFragment"
         android:label="PostsDetail" >
         <argument

@@ -1,15 +1,12 @@
 package com.example.producthunt.data.repository
 
 import android.os.Build
-import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.example.producthunt.data.db.CurrentDay
 import com.example.producthunt.data.db.dao.PostDao
 import com.example.producthunt.data.db.entity.Post
 import com.example.producthunt.data.network.PostNetworkDataSource
-import com.example.producthunt.data.network.Response.CurrentPostsResponse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -41,10 +38,10 @@ class PostRepositoryImpl(
             return@withContext postDao.loadPosts()
         }*/
     }
-    private fun persistFetchedPost(postList: List<Post>){
+    private fun persistFetchedPost(fetchedPost: List<Post>){
         GlobalScope.launch ( Dispatchers.IO){
+            val postList = fetchedPost
             postDao.insert(postList)
-            Log.e("dadda", "adawda")
         }
     }
 

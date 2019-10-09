@@ -8,7 +8,7 @@ import org.threeten.bp.LocalDate
 
 class CurrentPostsViewModel(
     private val postRepository : PostRepository
-) : ViewModel() {
+) : PostViewModel(postRepository) {
 
     val postEntries by lazyDeferred{
         postRepository.getPost(LocalDate.now())

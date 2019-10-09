@@ -32,11 +32,8 @@ class CurrentPostsFragment : ScopedFragment(), KodeinAware {
 
 
     override val kodein by closestKodein()
-
-    private var model: Communicator?=null
-
-
     private val viewModelFactory: PostListViewModelFactory by instance()
+
 
     private lateinit var viewModel: CurrentPostsViewModel
 
@@ -47,37 +44,16 @@ class CurrentPostsFragment : ScopedFragment(), KodeinAware {
         return inflater.inflate(R.layout.current_posts_fragment, container, false)
     }
 
+
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+
         viewModel = ViewModelProviders.of(this, viewModelFactory)
             .get(CurrentPostsViewModel::class.java)
 
-       /* val apiService = ApiProductHuntService(
-            ConnectivityInterceptorImpl(this.context!!)
-        )*/
-        /*val postNetworkDataSource = PostNetworkDataSourceImpl (apiService)
-
-        postNetworkDataSource.downloadedPost.observe(this, Observer{
-            textview.text = it.toString()
-
-        })
-
-        GlobalScope.launch(Dispatchers.Main){
-            postNetworkDataSource.fetchPost(CurrentDay.currentDay())
-            Log.e("Dia de hoje: " , CurrentDay.currentDay())
-        }*/
-
         (activity as AppCompatActivity).supportActionBar!!.title = "News"
-
-        model= ViewModelProviders.of(activity!!).get(Communicator::class.java)
-
         bindUI()
-
-        swipeContainer.setOnRefreshListener {
-            loadItems()
-        }
-
     }
 
     fun loadItems(){
@@ -94,12 +70,11 @@ class CurrentPostsFragment : ScopedFragment(), KodeinAware {
         val postsEntries = viewModel.postEntries.await()
 
         postsEntries.observe(this@CurrentPostsFragment, Observer {entries ->
-            if(entries == null) return@Observer
+                if (entries == null)return@Observer
 
             group_loading.visibility = View.GONE
 
             initRecylcerView(entries.toPostItems())
-           // Log.d("info" , entries.toPostItems()[1].toString())
         })
     }
 
@@ -116,8 +91,9 @@ class CurrentPostsFragment : ScopedFragment(), KodeinAware {
 
         recyclerView.apply {
             layoutManager = LinearLayoutManager(this@CurrentPostsFragment.context)
-        adapter= groupAdapter
+            adapter= groupAdapter
         }
+
         groupAdapter.setOnItemClickListener { item, view ->
             (item as? PostItem)?.let {
                 showPostDetail(it.postEntry.productId, view)
@@ -125,7 +101,6 @@ class CurrentPostsFragment : ScopedFragment(), KodeinAware {
         }
     }
     private fun showPostDetail(productId: Long, view: View){
-      //  model!!.setMsgCommunicator(id.toString())
         val actionDetail = CurrentPostsFragmentDirections.actionDetail(productId)
         Navigation.findNavController(view).navigate(actionDetail)
     }
