@@ -12,6 +12,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.threeten.bp.LocalDate
+import org.threeten.bp.ZonedDateTime
 
 class PostRepositoryImpl(
      private val postDao: PostDao,
@@ -30,8 +31,12 @@ class PostRepositoryImpl(
     override suspend fun getPost(
         date: LocalDate
     ): LiveData<List<Post>> {
-        postNetworkDataSource.fetchPost(CurrentDay.currentDay())
-        return postNetworkDataSource.downloadedPost
+        return withContext(Dispatchers.IO){
+           // initPostData()
+            postNetworkDataSource.fetchPost(CurrentDay.currentDay())
+            return@withContext postNetworkDataSource.downloadedPost
+        }
+
 
         /*
         return withContext(Dispatchers.IO){
@@ -51,5 +56,22 @@ class PostRepositoryImpl(
         return withContext(Dispatchers.IO){
             return@withContext postDao.getDetailedPost(productId)
         }
+    }
+
+    /*private suspend fun fetchPost(){
+        postNetworkDataSource.fetchPost(
+            currentDay.currentDay()
+        )
+    }*/
+
+    /*private suspend fun initPostData(){
+        if(isFetchCurrentNeeded(ZonedDateTime.now().minusHours(1)))
+           fetchPost()
+
+    }*/
+
+    private fun isFetchCurrentNeeded(lastFetchTime: org.threeten.bp.ZonedDateTime): Boolean{
+        val thirtyMinutesAgo = ZonedDateTime.now().minusMinutes(30)
+        return lastFetchTime.isBefore(thirtyMinutesAgo)
     }
 }

@@ -56,16 +56,6 @@ class CurrentPostsFragment : ScopedFragment(), KodeinAware {
         bindUI()
     }
 
-    fun loadItems(){
-        onItemsLoadComplete()
-
-    }
-
-    fun onItemsLoadComplete(){
-        swipeContainer.isRefreshing = false
-        bindUI()
-
-    }
     private fun bindUI() = launch(Dispatchers.Main){
         val postsEntries = viewModel.postEntries.await()
 
@@ -74,7 +64,8 @@ class CurrentPostsFragment : ScopedFragment(), KodeinAware {
 
             group_loading.visibility = View.GONE
 
-            initRecylcerView(entries.toPostItems())
+            initRecylcerView(entries!!.toPostItems())
+
         })
     }
 
