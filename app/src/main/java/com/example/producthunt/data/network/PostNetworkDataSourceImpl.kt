@@ -13,6 +13,7 @@ import com.example.producthunt.data.network.Response.CurrentPostsResponse
 import com.example.producthunt.internal.NoConnectivityException
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_main.view.*
+import java.time.LocalDate
 
 class PostNetworkDataSourceImpl (
     private val apiProductHuntService: ApiProductHuntService
@@ -22,18 +23,18 @@ class PostNetworkDataSourceImpl (
 
     val messageToUser= "You are offline"
 
-    private val _downloadedPost = MutableLiveData<List<Post>>()
-    override val downloadedPost: LiveData<List<Post>>
+    private val _downloadedPost = MutableLiveData<CurrentPostsResponse>()
+    override val downloadedPost: LiveData<CurrentPostsResponse>
         get() = _downloadedPost
 
     @RequiresApi(Build.VERSION_CODES.O)
     override suspend fun fetchPost(day: String) {
         try {
-            val fetchPosts = apiProductHuntService
-                .getCurrentPosts(CurrentDay.currentDay()/*, page, pageSize*/)
+            val fetchedPosts = apiProductHuntService
+                .getCurrentPosts(CurrentDay.currentDay())
                 .await()
-            _downloadedPost.postValue(fetchPosts.posts)
-            mSnackbar?.dismiss()
+            _downloadedPost.postValue(fetchedPosts)
+         //   mSnackbar?.dismiss()
         }catch (e : NoConnectivityException){
             Log.e("Connectivity", "No internet Connection" , e)
         }

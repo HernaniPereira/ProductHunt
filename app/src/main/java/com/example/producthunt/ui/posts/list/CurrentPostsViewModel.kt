@@ -11,7 +11,7 @@ class CurrentPostsViewModel(
 ) : PostViewModel(postRepository) {
 
     val postEntries by lazyDeferred{
-        postRepository.getPost(LocalDate.now())
+        postRepository.getPostList(LocalDate.now())
 
     }
 }

@@ -7,6 +7,7 @@ import com.example.producthunt.data.db.CurrentDay
 import com.example.producthunt.data.db.dao.PostDao
 import com.example.producthunt.data.db.entity.Post
 import com.example.producthunt.data.network.PostNetworkDataSource
+import com.example.producthunt.data.network.Response.CurrentPostsResponse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -23,29 +24,29 @@ class PostRepositoryImpl(
         postNetworkDataSource.apply {
             downloadedPost.observeForever{ newPost ->
                 persistFetchedPost(newPost)
+
             }
         }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    override suspend fun getPost(
-        date: LocalDate
+    override suspend fun getPostList(
+        startDate: LocalDate
     ): LiveData<List<Post>> {
         return withContext(Dispatchers.IO){
-           // initPostData()
-            postNetworkDataSource.fetchPost(CurrentDay.currentDay())
-            return@withContext postNetworkDataSource.downloadedPost
+           initPostData()
+            //postNetworkDataSource.fetchPost(CurrentDay.currentDay())
+            return@withContext postDao.getSimplePosts(startDate)
         }
-
 
         /*
         return withContext(Dispatchers.IO){
             return@withContext postDao.loadPosts()
         }*/
     }
-    private fun persistFetchedPost(fetchedPost: List<Post>){
+    private fun persistFetchedPost(fetchedPost: CurrentPostsResponse){
         GlobalScope.launch ( Dispatchers.IO){
-            val postList = fetchedPost
+            val postList = fetchedPost.posts
             postDao.insert(postList)
         }
     }
@@ -58,20 +59,36 @@ class PostRepositoryImpl(
         }
     }
 
-    /*private suspend fun fetchPost(){
+    private suspend fun fetchPost(){
         postNetworkDataSource.fetchPost(
-            currentDay.currentDay()
+            CurrentDay.currentDay()
         )
-    }*/
+    }
 
-    /*private suspend fun initPostData(){
-        if(isFetchCurrentNeeded(ZonedDateTime.now().minusHours(1)))
-           fetchPost()
+    private suspend fun initPostData(){
 
-    }*/
+        val lastP = postDao.getPostNonLive()
+        //if(isFetchCurrentNeeded(ZonedDateTime.now().minusHours(1)))
+        fetchPost()
 
-    private fun isFetchCurrentNeeded(lastFetchTime: org.threeten.bp.ZonedDateTime): Boolean{
+        /*if (lastP == null) {
+            fetchPost()
+
+            return
+        }
+        if(isFetchCurrentNeeded(lastP.)){
+            fetchPost()
+        }*/
+
+    }
+
+    private fun isFetchCurrentNeeded(lastFetchTime: ZonedDateTime): Boolean{
         val thirtyMinutesAgo = ZonedDateTime.now().minusMinutes(30)
         return lastFetchTime.isBefore(thirtyMinutesAgo)
     }
+
+
+//    29 5
+  //  45 3
+    //17 5
 }

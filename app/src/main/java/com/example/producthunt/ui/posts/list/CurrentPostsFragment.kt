@@ -23,17 +23,12 @@ import org.kodein.di.generic.instance
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.Navigation
 import com.example.producthunt.R
-import com.example.producthunt.data.db.CurrentDay
-import com.example.producthunt.ui.posts.detail.Communicator
-import com.example.producthunt.ui.posts.list.CurrentPostsFragmentDirections.actionDetail
 
 
 class CurrentPostsFragment : ScopedFragment(), KodeinAware {
 
-
     override val kodein by closestKodein()
     private val viewModelFactory: PostListViewModelFactory by instance()
-
 
     private lateinit var viewModel: CurrentPostsViewModel
 
@@ -54,6 +49,9 @@ class CurrentPostsFragment : ScopedFragment(), KodeinAware {
 
         (activity as AppCompatActivity).supportActionBar!!.title = "News"
         bindUI()
+        swipeContainer.setOnRefreshListener {
+            loadItems()
+        }
     }
 
     private fun bindUI() = launch(Dispatchers.Main){
@@ -67,6 +65,15 @@ class CurrentPostsFragment : ScopedFragment(), KodeinAware {
             initRecylcerView(entries!!.toPostItems())
 
         })
+    }
+
+    fun loadItems(){
+        bindUI()
+        onItemsLoadComplete()
+    }
+
+    fun onItemsLoadComplete(){
+        swipeContainer.isRefreshing=false
     }
 
     private fun List<Post>.toPostItems() : List<PostItem>{

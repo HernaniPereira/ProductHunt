@@ -5,6 +5,11 @@ import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
+import java.time.Instant
+import java.time.ZonedDateTime
+
+const val POST_ID = 0
+
 
 @Entity(tableName ="product_post", indices = [Index(value = ["productId"], unique = true)] )
 data class Post(

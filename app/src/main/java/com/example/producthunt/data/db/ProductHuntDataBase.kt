@@ -1,14 +1,13 @@
 package com.example.producthunt.data.db
 
 import android.content.Context
-import androidx.room.Database
-import androidx.room.Room
-import androidx.room.RoomDatabase
+import androidx.room.*
 import com.example.producthunt.data.db.dao.PostDao
 import com.example.producthunt.data.db.entity.Post
 
 @Database(
     entities = [Post::class], version =1,exportSchema = false)
+@TypeConverters(LocalDateConverter::class)
 abstract class ProductHuntDataBase : RoomDatabase(){
 
     abstract fun postDao() : PostDao

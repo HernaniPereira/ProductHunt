@@ -1,5 +1,6 @@
 package com.example.producthunt.data.network
 
+import android.util.Log
 import com.example.producthunt.data.network.Response.CurrentPostsResponse
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import kotlinx.coroutines.Deferred
@@ -48,6 +49,7 @@ interface ApiProductHuntService {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(ApiProductHuntService::class.java)
+
         }
     }
 }

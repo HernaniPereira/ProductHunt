@@ -6,7 +6,7 @@ import com.example.producthunt.data.network.Response.CurrentPostsResponse
 
 interface PostNetworkDataSource {
 
-     val downloadedPost: LiveData<List<Post>>
+     val downloadedPost: LiveData<CurrentPostsResponse>
 
     suspend fun fetchPost(
         day : String

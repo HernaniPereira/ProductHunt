@@ -7,7 +7,7 @@ import org.threeten.bp.LocalDate
 
 interface PostRepository {
 
-    suspend fun getPost(date: LocalDate) : LiveData<List<Post>>
+    suspend fun getPostList (date: LocalDate) : LiveData<List<Post>>
 
     suspend fun getPostById(productId: Long): LiveData<Post>
 

@@ -17,6 +17,7 @@ class PostItem (
            card_product_upvotes.text = postEntry?.votesCount.toString()
            card_product_comments_total.text = postEntry?.commentsCount.toString()
            card_product_view_comments.text = postEntry?.user?.username
+           date.text=postEntry?.day
            updatePostImage()
            updateUserImage()
        }
