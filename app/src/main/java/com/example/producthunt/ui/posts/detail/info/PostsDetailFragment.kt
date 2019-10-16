@@ -1,5 +1,6 @@
 package com.example.producthunt.ui.posts.detail.info
 
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -14,6 +15,7 @@ import com.bumptech.glide.Glide
 import com.example.producthunt.R
 import com.example.producthunt.internal.DateNotFoundException
 import com.example.producthunt.ui.base.ScopedFragment
+import com.example.producthunt.ui.posts.detail.viewPager.ViewPagerViewModel
 import kotlinx.android.synthetic.main.posts_detail_fragment.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -30,6 +32,17 @@ class PostsDetailFragment : ScopedFragment(), KodeinAware {
 
     lateinit var viewModel: PostsDetailViewModel
 
+    private var productId : Long = 0
+
+    companion object{
+
+        @JvmStatic
+        fun newInstance(productid:Long)= PostsDetailFragment().apply {
+            arguments = Bundle().apply {
+                putLong("produto",productid)
+            }
+        }
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -40,15 +53,14 @@ class PostsDetailFragment : ScopedFragment(), KodeinAware {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        val safeArgs =arguments?.let {
-            PostsDetailFragmentArgs.fromBundle(
-                it
-            )
-        }
 
-       val productId = safeArgs?.productId ?: throw DateNotFoundException()
+
+
+
         viewModel = ViewModelProviders.of(this, viewModelFactoryInstanceFactory(productId))
             .get(PostsDetailViewModel::class.java)
+
+
 
        /* val model=ViewModelProviders.of(activity!!).get(Communicator::class.java)
         model.message.observe(this, object : Observer<Any> {
@@ -57,7 +69,7 @@ class PostsDetailFragment : ScopedFragment(), KodeinAware {
             }
         })*/
 
-        bindUI()
+      bindUI()
     }
 
     private fun bindUI() = launch (Dispatchers.Main){
@@ -69,8 +81,9 @@ class PostsDetailFragment : ScopedFragment(), KodeinAware {
             // Log.d("info" , entries.toPostItems()[1].toString())
 
             Glide.with(this@PostsDetailFragment)
-                .load(entries.postImage?.productSmallImgUrl)
+                .load(entries.postImage?.productLargeImgUrl)
                 .into(itemScreenshot)
+
 
             buttonRedirect.setOnClickListener {
                 val address = Uri.parse(entries?.redirectUrl)
@@ -86,6 +99,13 @@ class PostsDetailFragment : ScopedFragment(), KodeinAware {
 
     private fun updateTitle(productName: String?) {
         (activity as? AppCompatActivity)?.supportActionBar?.title=productName
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        arguments?.getLong("produto")?.let {
+            productId= it
+        }
     }
 
 }

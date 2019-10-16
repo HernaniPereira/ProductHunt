@@ -10,8 +10,10 @@
         android:id="@+id/tabs"
         android:layout_width="match_parent"
         android:layout_height="?android:attr/actionBarSize"
+        android:background="@color/colorPrimary"
         app:tabGravity="fill"
-        app:tabMode="scrollable" />
+        app:tabMode="fixed"
+        app:tabTextColor="#fff"/>
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/viewPager"

@@ -14,9 +14,11 @@
             android:name="id"
             app:argType="long" />
         <action
-            android:id="@+id/actionDetail"
-            app:destination="@+id/actionDetail" />
+            android:id="@+id/actionViewPager"
+            app:destination="@id/viewPagerFragment" />
     </fragment>
+
+
     <fragment
         android:id="@+id/actionDetail"
         android:name="com.example.producthunt.ui.posts.detail.info.PostsDetailFragment"
@@ -25,11 +27,30 @@
             android:name="productId"
             app:argType="long" />
     </fragment>
-   <!-- <fragment
-        android:name="com.example.producthunt.ui.posts.detail.ViewPagerFragment"
-        android:label="ViewPagerFragment">
+
+
+    <fragment
+        android:id="@+id/viewPagerFragment"
+        android:name="com.example.producthunt.ui.posts.detail.ProductDetailViewPagerFragment"
+        android:label="ViewPagerFragment" >
+        <action
+            android:id="@+id/action_viewPagerFragment_to_detailCommentFragment"
+            app:destination="@id/detailCommentFragment" />
+        <action
+            android:id="@+id/actionDetail"
+            app:destination="@id/actionDetail" />
         <argument
             android:name="productId"
             app:argType="long" />
-    </fragment>-->
+    </fragment>
+    <fragment
+        android:id="@+id/detailCommentFragment"
+        android:name="com.example.producthunt.ui.posts.detail.comments.DetailCommentFragment"
+        android:label="detail_comment_fragment"
+        tools:layout="@layout/detail_comment_fragment" >
+        <argument
+            android:name="productId"
+            app:argType="long" />
+    </fragment>
+
 </navigation>

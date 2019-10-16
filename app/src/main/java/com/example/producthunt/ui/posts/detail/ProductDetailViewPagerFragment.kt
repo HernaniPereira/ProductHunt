@@ -2,34 +2,62 @@ package com.example.producthunt.ui.posts.detail
 
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Adapter
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import androidx.lifecycle.ViewModelProviders
 import androidx.viewpager.widget.ViewPager
 import com.example.producthunt.R
+import com.example.producthunt.internal.DateNotFoundException
+import com.example.producthunt.ui.base.ScopedFragment
 import com.example.producthunt.ui.posts.detail.comments.DetailCommentFragment
 import com.example.producthunt.ui.posts.detail.info.PostsDetailFragment
+import com.example.producthunt.ui.posts.detail.info.PostsDetailFragmentArgs
+import com.example.producthunt.ui.posts.detail.viewPager.ViewPagerViewModel
+import com.example.producthunt.ui.posts.detail.viewPager.ViewPagerViewModelFactory
+import com.example.producthunt.ui.posts.detail.votes.UpVotedFragment
 
 import com.google.android.material.tabs.TabLayout
-import org.w3c.dom.Comment
+import org.kodein.di.KodeinAware
+import org.kodein.di.android.x.closestKodein
+import org.kodein.di.generic.factory
 
 
-class ViewPagerFragment : Fragment() {
+class ProductDetailViewPagerFragment : ScopedFragment(), KodeinAware {
 
     internal var view: View? = null
     internal var adapter: Adapter? = null
-    private lateinit var viewModel: ViewPagerViewModel
+
+    override val kodein by closestKodein()
+
+
+  /*  private val viewModelFactoryInstanceFactory
+            : ((Long) -> ViewPagerViewModelFactory) by factory()*/
+
+
+    //private lateinit var viewModel: ViewPagerViewModel
+
 
     private fun setupViewPager(viewPager: ViewPager) {
-        adapter = Adapter(childFragmentManager)
-        adapter?.addFragment(PostsDetailFragment(), "1")
-        adapter?.addFragment(DetailCommentFragment(), "Comments")
+        val safeArgs =arguments?.let {
+            PostsDetailFragmentArgs.fromBundle(
+                it
+            )
+        }
+        adapter =
+            Adapter(
+                childFragmentManager
+            )
+        val productId = safeArgs?.productId ?: throw DateNotFoundException()
+        adapter?.addFragment(PostsDetailFragment.newInstance(productId), "Info")
+        adapter?.addFragment(UpVotedFragment(),"Upvoted")
+        adapter?.addFragment(DetailCommentFragment.votes(productId), "Comments")
         viewPager.adapter = adapter
+
     }
 
 
@@ -53,8 +81,18 @@ class ViewPagerFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(ViewPagerViewModel::class.java)
-        // TODO: Use the ViewModel
+
+        val safeArgs =arguments?.let {
+            PostsDetailFragmentArgs.fromBundle(
+                it
+            )
+        }
+
+        val productId = safeArgs?.productId ?: throw DateNotFoundException()
+
+
+        Log.e("productId", productId.toString() )
+       // view?.let { showPostDetail(productId, it) }
 
     }
 
@@ -78,6 +116,11 @@ class ViewPagerFragment : Fragment() {
             return mFragmentTitles[position]
         }
     }
+/*
+    private fun showPostDetail(productId: Long, view: View){
+        val actionDetail = ViewPagerFragmentDirections.actionDetail(productId)
+        Navigation.findNavController(view).navigate(actionDetail)
+    }*/
 
 
 }

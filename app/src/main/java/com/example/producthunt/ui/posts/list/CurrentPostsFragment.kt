@@ -24,7 +24,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.Navigation
 import com.example.producthunt.R
 
-
 class CurrentPostsFragment : ScopedFragment(), KodeinAware {
 
     override val kodein by closestKodein()
@@ -39,7 +38,6 @@ class CurrentPostsFragment : ScopedFragment(), KodeinAware {
         return inflater.inflate(R.layout.current_posts_fragment, container, false)
     }
 
-
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -47,7 +45,7 @@ class CurrentPostsFragment : ScopedFragment(), KodeinAware {
         viewModel = ViewModelProviders.of(this, viewModelFactory)
             .get(CurrentPostsViewModel::class.java)
 
-        (activity as AppCompatActivity).supportActionBar!!.title = "News"
+        (activity as AppCompatActivity).supportActionBar!!.title = "Current Tech News"
         bindUI()
         swipeContainer.setOnRefreshListener {
             loadItems()
@@ -63,7 +61,6 @@ class CurrentPostsFragment : ScopedFragment(), KodeinAware {
             group_loading.visibility = View.GONE
 
             initRecylcerView(entries!!.toPostItems())
-
         })
     }
 
@@ -99,10 +96,8 @@ class CurrentPostsFragment : ScopedFragment(), KodeinAware {
         }
     }
     private fun showPostDetail(productId: Long, view: View){
-        val actionDetail = CurrentPostsFragmentDirections.actionDetail(productId)
+        val actionDetail = CurrentPostsFragmentDirections.actionViewPager(productId)
         Navigation.findNavController(view).navigate(actionDetail)
     }
-
-
 
 }
