@@ -15,8 +15,7 @@ interface PostDao {
    @Insert(onConflict = OnConflictStrategy.REPLACE)
    fun insert(message: List<Post>)
 
-   @Query("select * from product_post where productId = productId")
-   fun getPostNonLive() : Post
+
 
    @Query("select * from product_post where day = :startDate order by productName")
    fun getSimplePosts(startDate: org.threeten.bp.LocalDate) : LiveData<List<Post>>

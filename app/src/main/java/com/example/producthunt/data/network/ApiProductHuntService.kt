@@ -1,6 +1,7 @@
 package com.example.producthunt.data.network
 
 import android.util.Log
+import com.example.producthunt.data.network.Response.CommentPostsResponse
 import com.example.producthunt.data.network.Response.CurrentPostsResponse
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import kotlinx.coroutines.Deferred
@@ -9,6 +10,7 @@ import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 
@@ -21,6 +23,10 @@ interface ApiProductHuntService {
         @Query("page") page:Int,
         @Query("per_page") pageSize:Int*/) : Deferred<CurrentPostsResponse>
 
+    @GET("posts/{postId}")
+    fun getCommentPosts(
+        @Path("postId") postId:Long
+    ):Deferred<CommentPostsResponse>
 
     companion object{
         operator fun invoke(

@@ -4,10 +4,12 @@ import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
-import com.example.producthunt.data.db.CurrentDay
+import com.example.producthunt.data.db.dao.CommentPostDao
 import com.example.producthunt.data.db.dao.PostDao
+import com.example.producthunt.data.db.entity.CommentPostEntry
 import com.example.producthunt.data.db.entity.Post
 import com.example.producthunt.data.network.PostNetworkDataSource
+import com.example.producthunt.data.network.Response.CommentPostsResponse
 import com.example.producthunt.data.network.Response.CurrentPostsResponse
 import com.example.producthunt.data.preferences.SharedPreferences
 import kotlinx.coroutines.Dispatchers
@@ -15,16 +17,12 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.threeten.bp.LocalDate
-import org.threeten.bp.LocalDateTime
 import org.threeten.bp.ZonedDateTime
-
-
-const val SHARED_PREFS = "sharedPrefs"
-const val TEXT = "text"
 
 class PostRepositoryImpl(
     private val postDao: PostDao,
     private val postNetworkDataSource: PostNetworkDataSource,
+    private val commentPostDao: CommentPostDao,
     private val prefs: SharedPreferences
 ) : PostRepository {
 
@@ -32,6 +30,10 @@ class PostRepositoryImpl(
         postNetworkDataSource.apply {
             downloadedPost.observeForever { newPost ->
                 persistFetchedPost(newPost)
+                prefs.savelastSavedAt(ZonedDateTime.now().toString())
+            }
+            downloadedCommentPost.observeForever { newComments ->
+                persistFetchedCommentPost(newComments)
                 prefs.savelastSavedAt(ZonedDateTime.now().toString())
             }
         }
@@ -43,20 +45,30 @@ class PostRepositoryImpl(
     ): LiveData<List<Post>> {
         return withContext(Dispatchers.IO) {
             initPostData(startDate)
-            //postNetworkDataSource.fetchPost(CurrentDay.currentDay())
             return@withContext postDao.getSimplePosts(startDate)
         }
+    }
 
-        /*
-        return withContext(Dispatchers.IO){
-            return@withContext postDao.loadPosts()
-        }*/
+    override suspend fun getCommentPostById(
+        productId: Long
+    ): LiveData<List<CommentPostEntry>> {
+        return withContext(Dispatchers.IO) {
+            initCommentData(productId)
+            return@withContext commentPostDao.getDetailedComment(productId)
+        }
     }
 
     private fun persistFetchedPost(fetchedPost: CurrentPostsResponse) {
         GlobalScope.launch(Dispatchers.IO) {
             val postList = fetchedPost.posts
             postDao.insert(postList)
+        }
+    }
+
+    private fun persistFetchedCommentPost(fetchedCommentPost: CommentPostsResponse){
+        GlobalScope.launch(Dispatchers.IO){
+            val commentPostList = fetchedCommentPost.post.comments
+            commentPostDao.insert(commentPostList)
         }
     }
 
@@ -70,39 +82,39 @@ class PostRepositoryImpl(
 
     private suspend fun fetchPost(startDate: LocalDate) {
         postNetworkDataSource.fetchPost(
-           startDate.toString()
+            startDate.toString()
         )
     }
 
+    private suspend fun initCommentData(productId: Long){
+        val lastCommentSaved = prefs.getlastSavedAt()
+        fetchCommentPosts(productId)
+
+        /*if(lastCommentSaved == null || isFetchCurrentNeeded(ZonedDateTime.parse(lastCommentSaved))){
+            fetchCommentPosts(productId)
+        }else{
+            postDao.getDetailedPost(productId)
+        }*/
+    }
 
     private suspend fun initPostData(startDate: LocalDate) {
 
         val lastSavedAt = prefs.getlastSavedAt()
-        if(lastSavedAt==null || isFetchCurrentNeeded(ZonedDateTime.parse(lastSavedAt))){
+       if (lastSavedAt == null || isFetchCurrentNeeded(ZonedDateTime.parse(lastSavedAt))) {
             fetchPost(startDate)
-        }else{
+        } else {
             postDao.getSimplePosts(startDate)
         }
-        //if(isFetchCurrentNeeded(ZonedDateTime.now().minusHours(1)))
+    }
 
-        /*if (lastP == null) {
-            fetchPost()
-
-            return
-        }
-        if(isFetchCurrentNeeded(lastP.)){
-            fetchPost()
-        }*/
-
+    private suspend fun fetchCommentPosts(productId: Long){
+        postNetworkDataSource.fetchCommentPosts(
+            productId
+        )
     }
 
     private fun isFetchCurrentNeeded(lastFetchTime: ZonedDateTime): Boolean {
         val thirtyMinutesAgo = ZonedDateTime.now().minusMinutes(30)
         return lastFetchTime.isBefore(thirtyMinutesAgo)
     }
-
-
-//    29 5
-    //  45 3
-    //17 5
 }

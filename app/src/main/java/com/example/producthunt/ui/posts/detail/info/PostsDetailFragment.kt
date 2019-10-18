@@ -13,9 +13,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.bumptech.glide.Glide
 
 import com.example.producthunt.R
-import com.example.producthunt.internal.DateNotFoundException
 import com.example.producthunt.ui.base.ScopedFragment
-import com.example.producthunt.ui.posts.detail.viewPager.ViewPagerViewModel
 import kotlinx.android.synthetic.main.posts_detail_fragment.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -53,14 +51,8 @@ class PostsDetailFragment : ScopedFragment(), KodeinAware {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-
-
-
-
         viewModel = ViewModelProviders.of(this, viewModelFactoryInstanceFactory(productId))
             .get(PostsDetailViewModel::class.java)
-
-
 
        /* val model=ViewModelProviders.of(activity!!).get(Communicator::class.java)
         model.message.observe(this, object : Observer<Any> {
@@ -94,6 +86,7 @@ class PostsDetailFragment : ScopedFragment(), KodeinAware {
             itemTagline.text = entries?.tagline ?: ""
             itemVotes.text = entries?.votesCount.toString()
 
+            merda.setText(productId.toString())
         })
     }
 
@@ -109,3 +102,5 @@ class PostsDetailFragment : ScopedFragment(), KodeinAware {
     }
 
 }
+
+

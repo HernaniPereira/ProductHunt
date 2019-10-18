@@ -56,7 +56,7 @@ class CurrentPostsFragment : ScopedFragment(), KodeinAware {
         val postsEntries = viewModel.postEntries.await()
 
         postsEntries.observe(this@CurrentPostsFragment, Observer {entries ->
-                if (entries == null)return@Observer
+            if (entries == null)return@Observer
 
             group_loading.visibility = View.GONE
 

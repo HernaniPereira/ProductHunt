@@ -9,7 +9,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
-import androidx.lifecycle.ViewModelProviders
 import androidx.viewpager.widget.ViewPager
 import com.example.producthunt.R
 import com.example.producthunt.internal.DateNotFoundException
@@ -17,14 +16,12 @@ import com.example.producthunt.ui.base.ScopedFragment
 import com.example.producthunt.ui.posts.detail.comments.DetailCommentFragment
 import com.example.producthunt.ui.posts.detail.info.PostsDetailFragment
 import com.example.producthunt.ui.posts.detail.info.PostsDetailFragmentArgs
-import com.example.producthunt.ui.posts.detail.viewPager.ViewPagerViewModel
-import com.example.producthunt.ui.posts.detail.viewPager.ViewPagerViewModelFactory
 import com.example.producthunt.ui.posts.detail.votes.UpVotedFragment
+import com.example.producthunt.ui.posts.list.CurrentPostsFragment
 
 import com.google.android.material.tabs.TabLayout
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.closestKodein
-import org.kodein.di.generic.factory
 
 
 class ProductDetailViewPagerFragment : ScopedFragment(), KodeinAware {
@@ -40,11 +37,9 @@ class ProductDetailViewPagerFragment : ScopedFragment(), KodeinAware {
 
 
     //private lateinit var viewModel: ViewPagerViewModel
-
-
     private fun setupViewPager(viewPager: ViewPager) {
         val safeArgs =arguments?.let {
-            PostsDetailFragmentArgs.fromBundle(
+             ProductDetailViewPagerFragmentArgs.fromBundle(
                 it
             )
         }
@@ -57,7 +52,6 @@ class ProductDetailViewPagerFragment : ScopedFragment(), KodeinAware {
         adapter?.addFragment(UpVotedFragment(),"Upvoted")
         adapter?.addFragment(DetailCommentFragment.votes(productId), "Comments")
         viewPager.adapter = adapter
-
     }
 
 
@@ -90,10 +84,8 @@ class ProductDetailViewPagerFragment : ScopedFragment(), KodeinAware {
 
         val productId = safeArgs?.productId ?: throw DateNotFoundException()
 
-
         Log.e("productId", productId.toString() )
        // view?.let { showPostDetail(productId, it) }
-
     }
 
     internal class Adapter(fm: FragmentManager?) : FragmentPagerAdapter(fm!!) {

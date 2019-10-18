@@ -42,6 +42,9 @@
         <argument
             android:name="productId"
             app:argType="long" />
+        <action
+            android:id="@+id/action_viewPagerFragment_to_upVotedFragment"
+            app:destination="@id/upVotedFragment" />
     </fragment>
     <fragment
         android:id="@+id/detailCommentFragment"
@@ -52,5 +55,10 @@
             android:name="productId"
             app:argType="long" />
     </fragment>
+    <fragment
+        android:id="@+id/upVotedFragment"
+        android:name="com.example.producthunt.ui.posts.detail.votes.UpVotedFragment"
+        android:label="up_voted_fragment"
+        tools:layout="@layout/up_voted_fragment" />
 
 </navigation>

@@ -9,6 +9,7 @@ import androidx.lifecycle.MutableLiveData
 import com.example.producthunt.R
 import com.example.producthunt.data.db.CurrentDay
 import com.example.producthunt.data.db.entity.Post
+import com.example.producthunt.data.network.Response.CommentPostsResponse
 import com.example.producthunt.data.network.Response.CurrentPostsResponse
 import com.example.producthunt.internal.NoConnectivityException
 import com.google.android.material.snackbar.Snackbar
@@ -37,6 +38,21 @@ class PostNetworkDataSourceImpl (
          //   mSnackbar?.dismiss()
         }catch (e : NoConnectivityException){
             Log.e("Connectivity", "No internet Connection" , e)
+        }
+    }
+
+    private val _downloadedCommentPost = MutableLiveData<CommentPostsResponse>()
+    override val downloadedCommentPost: LiveData<CommentPostsResponse>
+        get() = _downloadedCommentPost
+
+    override suspend fun fetchCommentPosts(postId: Long) {
+        try {
+            val fetchedCommentPost = apiProductHuntService
+                .getCommentPosts(postId)
+                .await()
+            _downloadedCommentPost.postValue(fetchedCommentPost)
+        }catch (e: NoConnectivityException){
+            Log.e("Connectivity", "No internet connection.", e)
         }
     }
 

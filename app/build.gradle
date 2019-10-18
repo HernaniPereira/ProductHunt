@@ -53,6 +53,9 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.1.0'
     kapt "androidx.room:room-compiler:$room_version"
 
+    //circular image
+    implementation 'de.hdodenhof:circleimageview:3.0.1'
+
     //Butterknife
     /* implementation 'com.jakewharton:butterknife:10.2.0'
     annotationProcessor 'com.jakewharton:butterknife-compiler:10.2.0'*/
