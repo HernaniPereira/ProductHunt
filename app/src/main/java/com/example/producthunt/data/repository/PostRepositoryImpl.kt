@@ -68,7 +68,7 @@ class PostRepositoryImpl(
     private fun persistFetchedCommentPost(fetchedCommentPost: CommentPostsResponse){
         GlobalScope.launch(Dispatchers.IO){
             val commentPostList = fetchedCommentPost.post.comments
-            commentPostDao.insert(commentPostList)
+            commentPostDao.insert(commentPostList)//retorna bem
         }
     }
 
@@ -89,6 +89,7 @@ class PostRepositoryImpl(
     private suspend fun initCommentData(productId: Long){
         val lastCommentSaved = prefs.getlastSavedAt()
         fetchCommentPosts(productId)
+        //commentPostDao.getDetailedComment(productId)
 
         /*if(lastCommentSaved == null || isFetchCurrentNeeded(ZonedDateTime.parse(lastCommentSaved))){
             fetchCommentPosts(productId)

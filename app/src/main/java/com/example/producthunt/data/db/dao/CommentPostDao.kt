@@ -14,6 +14,6 @@ interface CommentPostDao {
     fun insert(commentPostEntries: List<CommentPostEntry>)
 
 
-    @Query("select * from comment_posts  where postId = :productId")
+    @Query("select * from comment_posts  where postId = :productId ")
     fun getDetailedComment (productId: Long): LiveData<List<CommentPostEntry>>
 }

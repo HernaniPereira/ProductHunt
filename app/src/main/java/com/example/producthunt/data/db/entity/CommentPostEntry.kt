@@ -9,9 +9,9 @@ import androidx.room.util.TableInfo
 import com.google.gson.annotations.SerializedName
 
 
-@Entity(tableName= "comment_posts", indices= [Index(value =["postId"], unique = false)])
+@Entity(tableName= "comment_posts", indices= [Index(value =["postId"], unique = true)])
 data class CommentPostEntry(
-    @SerializedName("post_id") @PrimaryKey(autoGenerate = true) val postId: Long,
+    @SerializedName("post_id")val postId: Long,
     val body: String,
 /*    @SerializedName("child_comments")
     val childComments: List<ChildComment>,*/
@@ -20,7 +20,7 @@ data class CommentPostEntry(
     @SerializedName("created_at")
     val createdAt: String,
     val hunter: Boolean,
-    val id: Int,
+    @SerializedName("comment_id")@PrimaryKey(autoGenerate = true)   val id: Int,
     @SerializedName("live_guest")
     val liveGuest: Boolean,
     val maker: Boolean,
